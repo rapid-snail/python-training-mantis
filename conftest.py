@@ -3,6 +3,7 @@ from fixture.application import Application
 import json
 import os.path
 from fixture.db import DbFixture
+from fixture.soap import SoapFixture
 
 fixture = None
 target = None
@@ -21,10 +22,10 @@ def load_config(file):
 def app(request):
     global fixture
     browser = request.config.getoption("--browser")
-    web_config = load_config(request.config.getoption("--target"))['web']
+    config = load_config(request.config.getoption("--target"))
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=web_config['baseUrl'])
-    fixture.session.ensure_login(username=web_config['username'], password=web_config['password'])
+        fixture = Application(browser=browser, base_url=config['web']['baseUrl'])
+    fixture.session.ensure_login(username=config['webauth']['username'], password=config['webauth']['password'])
     return fixture
 
 
@@ -36,6 +37,13 @@ def db(request):
         dbfixture.destroy()
     request.addfinalizer(fin)
     return dbfixture
+
+
+@pytest.fixture(scope="session")
+def soap(request):
+    config = load_config(request.config.getoption("--target"))
+    soap_fixture = SoapFixture(url=config['soap']['url'], username=config['webauth']['username'], password=config['webauth']['password'])
+    return soap_fixture
 
 
 @pytest.fixture(scope="session", autouse=True)

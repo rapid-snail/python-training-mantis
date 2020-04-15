@@ -7,10 +7,10 @@ def random_string(prefix, max_len):
     return prefix + "".join([random.choice(symbols) for _ in range(max_len)])
 
 
-def test_project_add(app, db):
-    old_list = db.get_project_list()
+def test_project_add(app, soap):
+    old_list = soap.get_project_list()
     name = random_string("proj_", 10)
     app.project.add_new(name)
-    new_list = db.get_project_list()
+    new_list = soap.get_project_list()
     old_list.append(name)
     assert sorted(old_list) == sorted(new_list)

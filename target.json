@@ -1,8 +1,13 @@
 {
   "web": {
-    "baseUrl": "http://localhost/mantis/",
+    "baseUrl": "http://localhost/mantis/"
+  },
+  "webauth": {
     "username" : "administrator",
     "password" : "root"
+  },
+  "soap": {
+    "url": "http://localhost/mantis/api/soap/mantisconnect.php?wsdl"
   },
   "db": {
     "host": "127.0.0.1",
